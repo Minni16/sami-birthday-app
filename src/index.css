@@ -1,0 +1,204 @@
+@import '@mantine/core/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .envelope-wrap {
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  .envelope {
+    position: relative;
+    width: 260px;
+    height: 170px;
+    margin: 0 auto;
+    transform-style: preserve-3d;
+    transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    animation: envelope-float 4s ease-in-out infinite;
+  }
+
+  @keyframes envelope-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .envelope-wrap:hover .envelope {
+    transform: scale(1.08) translateY(-8px);
+    animation: none;
+  }
+
+  .envelope-wrap.open .envelope {
+    animation: none;
+  }
+
+  .envelope-wrap.open .envelope .flap {
+    transform: rotateX(-175deg);
+    z-index: 0;
+  }
+
+  .envelope-wrap.open .envelope .letter {
+    transform: translateX(-50%) translateY(-110px);
+    z-index: 2;
+    pointer-events: auto;
+    transition: transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1) 0.28s;
+  }
+
+  .envelope .base {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    height: 0;
+    border-left: 130px solid transparent;
+    border-right: 130px solid transparent;
+    border-bottom: 120px solid #e8a0a8;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.12));
+    transition: filter 0.3s ease;
+  }
+
+  .envelope-wrap:hover .envelope .base {
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.18));
+  }
+
+  .envelope .left,
+  .envelope .right {
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 120px solid #c97b84;
+  }
+
+  .envelope .left {
+    left: 0;
+    border-left: 130px solid transparent;
+    border-right: 0 solid transparent;
+    transform-origin: right center;
+  }
+
+  .envelope .right {
+    right: 0;
+    border-right: 130px solid transparent;
+    border-left: 0 solid transparent;
+    transform-origin: left center;
+  }
+
+  .envelope .flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 130px solid transparent;
+    border-right: 130px solid transparent;
+    border-top: 85px solid #e8a0a8;
+    transform-origin: 50% 100%;
+    transform: rotateX(0deg);
+    transition: transform 0.65s cubic-bezier(0.34, 1.2, 0.64, 1);
+    z-index: 1;
+    backface-visibility: hidden;
+  }
+
+  .envelope .letter {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    width: 210px;
+    height: 130px;
+    background: #fdf6ed;
+    border-radius: 4px;
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.12);
+    transition: transform 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) 0s;
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #2d2a2a;
+    font-style: italic;
+  }
+
+  .envelope .letter::before {
+    content: "💌 Open me";
+    opacity: 0.7;
+    transition: opacity 0.2s ease 0.1s;
+  }
+
+  .envelope-wrap.open .envelope .letter::before {
+    content: "";
+    opacity: 0;
+  }
+
+  .heart-float {
+    animation: float 7s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15)) drop-shadow(0 0 8px rgba(232, 160, 168, 0.4));
+  }
+
+  .heart-float.heart-visible {
+    opacity: 0.92;
+  }
+
+  .heart-float.burst {
+    animation: burst 0.5s ease-out forwards;
+    pointer-events: none;
+  }
+
+  @keyframes float {
+    from { transform: translateY(100vh) rotate(0deg); opacity: 0.92; }
+    to { transform: translateY(-15vh) rotate(15deg); opacity: 0.25; }
+  }
+
+  @keyframes burst {
+    to { transform: scale(2); opacity: 0; }
+  }
+
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: fall 3s linear forwards;
+    z-index: 50;
+  }
+
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); }
+  }
+
+  @keyframes gentle-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.02); }
+  }
+
+  /* Letter modal: modern overlay scrollbar (thin pill, visible only while scrolling) */
+  .letter-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
+  .letter-scroll.is-scrolling {
+    scrollbar-color: rgba(201, 123, 132, 0.6) transparent;
+  }
+  .letter-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .letter-scroll::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 6px 0;
+  }
+  .letter-scroll::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 999px;
+  }
+  .letter-scroll.is-scrolling::-webkit-scrollbar-thumb {
+    background: rgba(201, 123, 132, 0.5);
+    border-radius: 999px;
+  }
+  .letter-scroll.is-scrolling::-webkit-scrollbar-thumb:hover {
+    background: rgba(201, 123, 132, 0.75);
+  }
+}
